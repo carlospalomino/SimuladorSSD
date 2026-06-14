@@ -198,16 +198,37 @@ export function useSSD() {
     }));
   }, []);
 
+  // Guarda una copia profunda del escenario activo para poder reiniciar sobre él
+  const [activeScenario, setActiveScenario] = useState(null);
+
   /* ── 5. RESET ──────────────────────────────────────────────────── */
   const reset = useCallback(() => {
-    setState(buildInitialState());
-  }, []);
+    if (activeScenario) {
+      setState({
+        blocks:      JSON.parse(JSON.stringify(activeScenario.blocks)),
+        ftl:         JSON.parse(JSON.stringify(activeScenario.ftl)),
+        trimEnabled: activeScenario.trimEnabled,
+        osWrites:    activeScenario.osWrites,
+        nandWrites:  activeScenario.nandWrites,
+        nandErases:  activeScenario.nandErases,
+        log: [{
+          id: Date.now(),
+          msg: `♻️ Escenario reiniciado: "${activeScenario.title}"`,
+          type: 'info',
+          ts: new Date().toLocaleTimeString(),
+        }],
+      });
+    } else {
+      setState(buildInitialState());
+    }
+  }, [activeScenario]);
 
   /* ── 6. CARGAR ESCENARIO ──────────────────────────────────── */
   const loadScenario = useCallback((scenario) => {
+    setActiveScenario(scenario);
     setState({
-      blocks:      scenario.blocks,
-      ftl:         scenario.ftl,
+      blocks:      JSON.parse(JSON.stringify(scenario.blocks)),
+      ftl:         JSON.parse(JSON.stringify(scenario.ftl)),
       trimEnabled: scenario.trimEnabled,
       osWrites:    scenario.osWrites,
       nandWrites:  scenario.nandWrites,
