@@ -1,10 +1,9 @@
 import { useState, useCallback } from 'react';
 
 /* ─── CONSTANTES ───────────────────────────────────────────────── */
-export const NUM_BLOCKS = 4;   // bloques físicos NAND
-export const PAGES_PER_BLOCK = 4; // páginas por bloque
+export const NUM_BLOCKS = 4;
+export const PAGES_PER_BLOCK = 4;
 
-// Estado de una página
 export const PAGE_FREE    = 'free';
 export const PAGE_VALID   = 'valid';
 export const PAGE_INVALID = 'invalid';
@@ -199,9 +198,27 @@ export function useSSD() {
     }));
   }, []);
 
-  /* ── 5. RESET ─────────────────────────────────────────────────── */
+  /* ── 5. RESET ──────────────────────────────────────────────────── */
   const reset = useCallback(() => {
     setState(buildInitialState());
+  }, []);
+
+  /* ── 6. CARGAR ESCENARIO ──────────────────────────────────── */
+  const loadScenario = useCallback((scenario) => {
+    setState({
+      blocks:      scenario.blocks,
+      ftl:         scenario.ftl,
+      trimEnabled: scenario.trimEnabled,
+      osWrites:    scenario.osWrites,
+      nandWrites:  scenario.nandWrites,
+      nandErases:  scenario.nandErases,
+      log: [{
+        id: Date.now(),
+        msg: `📚 Escenario cargado: "${scenario.title}" — ${scenario.description}`,
+        type: 'info',
+        ts: new Date().toLocaleTimeString(),
+      }],
+    });
   }, []);
 
   /* ── STATS derivadas ──────────────────────────────────────────── */
@@ -231,5 +248,6 @@ export function useSSD() {
     garbageCollect,
     toggleTrim,
     reset,
+    loadScenario,
   };
 }

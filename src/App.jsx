@@ -6,6 +6,7 @@ import FTLTable from './components/FTLTable.jsx';
 import NANDGrid from './components/NANDGrid.jsx';
 import StatsPanel from './components/StatsPanel.jsx';
 import EventLog from './components/EventLog.jsx';
+import ScenarioSelector from './components/ScenarioSelector.jsx';
 import Footer from './components/Footer.jsx';
 
 /**
@@ -72,14 +73,17 @@ export default function App() {
       {/* ── Main ────────────────────────────────────────────────── */}
       <main className="app-main">
         <section className="top-row">
-          <OSPanel
-            trimEnabled={ssd.trimEnabled}
-            onWrite={ssd.writeLBA}
-            onDelete={ssd.deleteLBA}
-            onGC={ssd.garbageCollect}
-            onToggleTrim={ssd.toggleTrim}
-            onReset={ssd.reset}
-          />
+          <div className="left-col">
+            <ScenarioSelector onLoad={ssd.loadScenario} />
+            <OSPanel
+              trimEnabled={ssd.trimEnabled}
+              onWrite={ssd.writeLBA}
+              onDelete={ssd.deleteLBA}
+              onGC={ssd.garbageCollect}
+              onToggleTrim={ssd.toggleTrim}
+              onReset={ssd.reset}
+            />
+          </div>
           <FTLTable ftl={ssd.ftl} blocks={ssd.blocks} />
           <StatsPanel
             osWrites={ssd.osWrites}
