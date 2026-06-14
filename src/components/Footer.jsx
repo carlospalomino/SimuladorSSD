@@ -8,9 +8,9 @@ export default function Footer({ sessionOps = 0 }) {
 
   useEffect(() => {
     fetch(`https://abacus.jasoncameron.dev/hit/${COUNTER_NS}/visitas`)
-      .then(r => r.json()).then(d => setVisitCount(d.value)).catch(() => {});
-    fetch(`https://abacus.jasoncameron.dev/get/${COUNTER_NS}/operaciones`)
-      .then(r => r.json()).then(d => setGlobalOps(d.value)).catch(() => {});
+      .then(r => r.json()).then(d => setVisitCount(d.value ?? '0')).catch(() => setVisitCount('0'));
+    fetch(`https://abacus.jasoncameron.dev/hit/${COUNTER_NS}/operaciones`)
+      .then(r => r.json()).then(d => setGlobalOps(d.value ?? '0')).catch(() => setGlobalOps('0'));
   }, []);
 
   return (
